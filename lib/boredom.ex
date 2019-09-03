@@ -1,18 +1,30 @@
 defmodule Boredom do
   @moduledoc """
-  Documentation for Boredom.
+  Boredom context.
   """
 
   @doc """
-  Hello world.
+  Get a random activity to do when you're bored.
 
   ## Examples
 
-      iex> Boredom.hello()
-      :world
-
+    iex> Boredom.get_random_activity()
+    %{}
   """
-  def hello do
-    :world
+  def get_random_activity do
+    "https://www.boredapi.com/api/activity"
+    |> HTTPoison.get!()
+    |> Map.get(:body)
+    |> Poison.decode!()
+    |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+    |> price_to_cost()
+  end
+
+  defp price_to_cost(%{price: price} = map) when price >= 0 and price < 0.5 do
+    Map.merge(map, %{cost: "Low"})
+  end
+
+  defp price_to_cost(%{price: price} = map) when price >= 0.5 do
+    Map.merge(map, %{cost: "High"})
   end
 end

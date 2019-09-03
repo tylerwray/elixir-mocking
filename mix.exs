@@ -22,7 +22,8 @@ defmodule Boredom.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.5"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 end

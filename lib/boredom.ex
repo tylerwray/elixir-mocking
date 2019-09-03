@@ -3,6 +3,12 @@ defmodule Boredom do
   Boredom context.
   """
 
+  @bored_api Application.get_env(
+               :boredom,
+               :bored_api,
+               BoredAPI
+             )
+
   @doc """
   Get a random activity to do when you're bored.
 
@@ -12,11 +18,17 @@ defmodule Boredom do
     %{}
   """
   def get_random_activity do
-    "https://www.boredapi.com/api/activity"
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> Poison.decode!()
-    |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+    Application.get_env(
+      :boredom,
+      :bored_api,
+      BoredAPI
+    )
+    |> IO.inspect(label: "Here")
+
+    IO.inspect(@bored_api, label: "ther")
+
+    ""
+    |> @bored_api.get_activity()
     |> price_to_cost()
   end
 

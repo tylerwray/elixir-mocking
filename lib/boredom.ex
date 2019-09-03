@@ -3,6 +3,8 @@ defmodule Boredom do
   Boredom context.
   """
 
+  import Mockery.Macro
+
   @doc """
   Get a random activity to do when you're bored.
 
@@ -13,7 +15,7 @@ defmodule Boredom do
   """
   def get_random_activity do
     "https://www.boredapi.com/api/activity"
-    |> HTTPoison.get!()
+    |> mockable(HTTPoison).get!()
     |> Map.get(:body)
     |> Poison.decode!()
     |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
